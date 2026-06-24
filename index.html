@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ACROZELA Quotation Generator - Professional tool for creating business quotations instantly. Supports Indian Currency (INR).">
+    <meta name="keywords" content="Quotation Generator, acrozela Quotation Generator, Free Invoice Maker, India Quotation Tool, ACROZELA TECH">
+    <title>ACROZELA QUOTATION GENERATOR</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --lite-blue-bg: #f4f8fb;
+            --border-color: #d1d9e6;
+            --text-dark: #2c3e50;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--lite-blue-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: var(--white);
+            border-bottom: 3px solid var(--primary-blue);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        header h1 {
+            letter-spacing: 2px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 1.8rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .grid-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary-blue);
+        }
+
+        /* Table Styling */
+        .item-table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th {
+            background: var(--primary-blue);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .btn {
+            cursor: pointer;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-add {
+            background: #28a745;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+        }
+
+        .btn-generate {
+            background: var(--primary-blue);
+            color: white;
+            width: 100%;
+            font-size: 1.1rem;
+            padding: 15px;
+            margin-top: 30px;
+            text-transform: uppercase;
+        }
+
+        /* Summary Section */
+        .summary-box {
+            margin-top: 30px;
+            float: right;
+            width: 300px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .grand-total {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            font-weight: 700;
+            color: #777;
+            letter-spacing: 1px;
+        }
+
+        /* Print Area Hide */
+        #quotation-preview {
+            display: none;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #quotation-preview, #quotation-preview * { visibility: visible; }
+            #quotation-preview {
+                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 40px;
+            }
+            .no-print { display: none; }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .grid-row { grid-template-columns: 1fr; }
+            .container { padding: 15px; }
+            .summary-box { width: 100%; float: none; }
+            header h1 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>ACROZELA QUOTATION GENERATOR</h1>
+    </header>
+
+    <div class="container no-print">
+        <div class="grid-row">
+            <div class="input-group">
+                <label>YOUR BUSINESS NAME</label>
+                <input type="text" id="bizName" placeholder="Enter Your Company Name">
+            </div>
+            <div class="input-group">
+                <label>QUOTATION NO.</label>
+                <input type="text" id="qNumber" placeholder="e.g. QT-101">
+            </div>
+        </div>
+
+        <div class="grid-row">
+            <div class="input-group">
+                <label>BILL TO (CUSTOMER DETAILS)</label>
+                <textarea id="clientDetails" rows="4" placeholder="Customer Name, Address, Contact"></textarea>
+            </div>
+            <div class="input-group">
+                <label>DATE</label>
+                <input type="date" id="qDate">
+            </div>
+        </div>
+
+        <div class="item-table-container">
+            <table id="itemsTable">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th width="100">Qty</th>
+                        <th width="150">Price (₹)</th>
+                        <th width="150">Amount (₹)</th>
+                        <th width="50">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    <tr>
+                        <td><input type="text" class="item-desc" placeholder="Item Name"></td>
+                        <td><input type="number" class="item-qty" value="1" oninput="calculate()"></td>
+                        <td><input type="number" class="item-price" value="0" oninput="calculate()"></td>
+                        <td><input type="text" class="item-total" value="0.00" readonly></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-add" onclick="addRow()">+ Add New Item</button>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-row">
+                <span>Sub Total:</span>
+                <span>₹ <span id="subTotal">0.00</span></span>
+            </div>
+            <div class="summary-row">
+                <span>GST (%)</span>
+                <input type="number" id="gstPer" value="18" style="width: 60px; padding: 5px;" oninput="calculate()">
+            </div>
+            <div class="summary-row grand-total">
+                <span>Total:</span>
+                <span>₹ <span id="grandTotal">0.00</span></span>
+            </div>
+            <button class="btn btn-generate" onclick="generateQuotation()">Generate & Print Quotation</button>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+
+    <!-- Hidden Preview for Printing -->
+    <div id="quotation-preview">
+        <h2 id="p-bizName" style="color: var(--primary-blue); text-transform: uppercase;"></h2>
+        <hr style="margin: 20px 0; border: 1px solid #eee;">
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                <h4>Bill To:</h4>
+                <p id="p-client" style="white-space: pre-line;"></p>
+            </div>
+            <div style="text-align: right;">
+                <p><strong>Quotation No:</strong> <span id="p-no"></span></p>
+                <p><strong>Date:</strong> <span id="p-date"></span></p>
+            </div>
+        </div>
+        <table style="margin-top: 30px; width: 100%; border: 1px solid #eee;">
+            <thead>
+                <tr style="background: #f8f9fa;">
+                    <th style="color: #333; border: 1px solid #eee;">Description</th>
+                    <th style="color: #333; border: 1px solid #eee;">Qty</th>
+                    <th style="color: #333; border: 1px solid #eee;">Price</th>
+                    <th style="color: #333; border: 1px solid #eee;">Amount</th>
+                </tr>
+            </thead>
+            <tbody id="p-tbody"></tbody>
+        </table>
+        <div style="margin-top: 20px; text-align: right; width: 100%;">
+            <p>Sub Total: ₹ <span id="p-sub"></span></p>
+            <p>Tax: <span id="p-gst-val"></span>%</p>
+            <h3 style="color: var(--primary-blue);">Grand Total: ₹ <span id="p-grand"></span></h3>
+        </div>
+        <div style="margin-top: 50px;">
+            <p>Notes: This is a computer-generated quotation.</p>
+        </div>
+    </div>
+
+    <footer>
+        DEVELOPED BY ACROZELA TECH
+    </footer>
+
+    <script>
+        // Set default date
+        document.getElementById('qDate').valueAsDate = new Date();
+
+        function addRow() {
+            const tbody = document.getElementById('tbody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" class="item-desc" placeholder="Item Name"></td>
+                <td><input type="number" class="item-qty" value="1" oninput="calculate()"></td>
+                <td><input type="number" class="item-price" value="0" oninput="calculate()"></td>
+                <td><input type="text" class="item-total" value="0.00" readonly></td>
+                <td><button class="btn btn-remove" onclick="removeRow(this)">X</button></td>
+            `;
+            tbody.appendChild(row);
+            calculate();
+        }
+
+        function removeRow(btn) {
+            btn.parentElement.parentElement.remove();
+            calculate();
+        }
+
+        function calculate() {
+            let subTotal = 0;
+            const rows = document.querySelectorAll('#tbody tr');
+            
+            rows.forEach(row => {
+                const qty = row.querySelector('.item-qty').value || 0;
+                const price = row.querySelector('.item-price').value || 0;
+                const amount = qty * price;
+                row.querySelector('.item-total').value = amount.toFixed(2);
+                subTotal += amount;
+            });
+
+            const gstPer = document.getElementById('gstPer').value || 0;
+            const gstAmount = (subTotal * gstPer) / 100;
+            const total = subTotal + gstAmount;
+
+            document.getElementById('subTotal').innerText = subTotal.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            document.getElementById('grandTotal').innerText = total.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+        }
+
+        function generateQuotation() {
+            // Validation
+            if(!document.getElementById('bizName').value) {
+                alert("Please enter Business Name");
+                return;
+            }
+
+            // Map values to Print Preview
+            document.getElementById('p-bizName').innerText = document.getElementById('bizName').value;
+            document.getElementById('p-client').innerText = document.getElementById('clientDetails').value;
+            document.getElementById('p-no').innerText = document.getElementById('qNumber').value;
+            document.getElementById('p-date').innerText = document.getElementById('qDate').value;
+            
+            // Map Table
+            const pTbody = document.getElementById('p-tbody');
+            pTbody.innerHTML = '';
+            const rows = document.querySelectorAll('#tbody tr');
+            
+            rows.forEach(row => {
+                const desc = row.querySelector('.item-desc').value;
+                const qty = row.querySelector('.item-qty').value;
+                const price = row.querySelector('.item-price').value;
+                const total = row.querySelector('.item-total').value;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="border: 1px solid #eee; padding: 8px;">${desc}</td>
+                    <td style="border: 1px solid #eee; padding: 8px;">${qty}</td>
+                    <td style="border: 1px solid #eee; padding: 8px;">₹${price}</td>
+                    <td style="border: 1px solid #eee; padding: 8px;">₹${total}</td>
+                `;
+                pTbody.appendChild(tr);
+            });
+
+            document.getElementById('p-sub').innerText = document.getElementById('subTotal').innerText;
+            document.getElementById('p-gst-val').innerText = document.getElementById('gstPer').value;
+            document.getElementById('p-grand').innerText = document.getElementById('grandTotal').innerText;
+
+            // Trigger Print
+            window.print();
+        }
+    </script>
+</body>
+</html>
